@@ -1,0 +1,12 @@
+# Russian strings go here for Rails i18n
+ru:
+  project_module_print_issue: Печать задачи
+  cancel_print: Отмена
+  print_it: Печать
+  redmine_approve_select_trackers: Выберите трекеры для плагина
+  settings_print_template: HTML шаблон страницы для печати
+  settings_print_template_description: (обязательно добавьте элемент с атрибутом data-content="issue-description", в этот элемент будет вставлено описание из задачи)
+  print_example_template_header: Пример шаблона для печати
+  print_example_template_footer: Эта страница создана как пример. Вы можете изменить этот шаблон
+  setting_plugin_redmine_print_issue: на странице настроек
+

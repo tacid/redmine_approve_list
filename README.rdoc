@@ -1,0 +1,14 @@
+= Plugin to add approvers to issue
+=== About
+
+This plugin adds approvers in the same way as watchers to issue
+
+=== Installation instructions
+
+Change to redmine plugins directory and make:
+    git clone https://github.com/tacid/redmine_approve_list
+
+After this you should run migration:
+    bundle exec rake redmine:plugins NAME=redmine_approve_list RAILS_ENV=production
+
+and restart your redmine.

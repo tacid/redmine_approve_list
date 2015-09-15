@@ -1,0 +1,8 @@
+<p><%=
+plugin_setting_multiselect(
+  :plugin_redmine_approve_list,
+  :approve_tracker_ids,
+  Tracker.sorted.collect {|t| [t.name, t.id.to_s]},
+  { label: :redmine_approve_select_trackers })
+%></p>
+<p>
