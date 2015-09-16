@@ -6,5 +6,5 @@ Rails.configuration.to_prepare do
 end
 
 module RedmineApproveList
-  def self.settings() Setting[:plugin_approve_list] end
+  def self.settings() Setting[:plugin_redmine_approve_list] end
 end
