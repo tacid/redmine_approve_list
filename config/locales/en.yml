@@ -1,11 +1,12 @@
-# English strings go here for Rails i18n
-en:
-  project_module_print_issue: Print issue
-  cancel_print: Cancel
-  print_it: Print
+# Russian strings go here for Rails i18n
+ru:
   redmine_approve_select_trackers: Select trackers for plugin
-  setting_print_template: HTML template for the print page
-  setting_print_template_description: (You *SHOUL* add element with attribute data-content="issue-description" where issue description goes)
-  print_example_template_header: This is example print page template
-  print_example_template_footer: This is just an example. You can change template in the plugin
-  setting_plugin_redmine_print_issue: on settins page
+  button_unapprove: Unapprove
+  button_approve: Approve
+  field_approver: Approver
+  label_issue_approvers: Approvers
+  label_approved_issues: Issues to approve
+  permission_add_issue_approvers: Add issue approvers
+  permission_view_issue_approvers: View issue approvers
+  permission_delete_issue_approvers: Delete issue approvers
+  label_search_for_approvers: Search for approvers

@@ -1,12 +1,12 @@
 # Russian strings go here for Rails i18n
 ru:
-  project_module_print_issue: Печать задачи
-  cancel_print: Отмена
-  print_it: Печать
   redmine_approve_select_trackers: Выберите трекеры для плагина
-  settings_print_template: HTML шаблон страницы для печати
-  settings_print_template_description: (обязательно добавьте элемент с атрибутом data-content="issue-description", в этот элемент будет вставлено описание из задачи)
-  print_example_template_header: Пример шаблона для печати
-  print_example_template_footer: Эта страница создана как пример. Вы можете изменить этот шаблон
-  setting_plugin_redmine_print_issue: на странице настроек
-
+  button_unapprove: Не согласовывать
+  button_approve: Согласовывать
+  field_approver: Согласование
+  label_issue_approvers: Список согласования
+  label_approved_issues: Задачи на согласовании
+  permission_add_issue_approvers: Добавление в список согласования
+  permission_view_issue_approvers: Просмотр списка согласования
+  permission_delete_issue_approvers: Удаление со списка согласования
+  label_search_for_approvers: Найти участников для согласования
