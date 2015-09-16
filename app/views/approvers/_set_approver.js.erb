@@ -1,0 +1,3 @@
+<% selector = ".#{approver_css(approved)}" %>
+$("<%= selector %>").each(function(){$(this).replaceWith("<%= escape_javascript approver_link(approved, user) %>")});
+$('#approvers').html('<%= escape_javascript(render(:partial => 'approvers/approvers', :locals => {:approved => approved.first})) %>');

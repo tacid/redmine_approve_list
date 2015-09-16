@@ -1,0 +1,12 @@
+<% if User.current.allowed_to?(:add_issue_approvers, approved.project) %>
+<div class="contextual">
+<%= link_to l(:button_add),
+      {:controller => 'approvers', :action => 'new', :object_type => approved.class.name.underscore, :object_id => approved},
+      :remote => true,
+      :method => 'get' %>
+</div>
+<% end %>
+
+<h3><%= l(:label_issue_approvers) %> (<%= approved.approver_users.size %>)</h3>
+
+<%= approvers_list(approved) %>

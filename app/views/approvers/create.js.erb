@@ -1,0 +1,2 @@
+$('#ajax-modal').html('<%= escape_javascript(render(:partial => 'approvers/new', :locals => {:approved => @approved, :users => @users})) %>');
+$('#approvers').html('<%= escape_javascript(render(:partial => 'approvers/approvers', :locals => {:approved => @approved})) %>');

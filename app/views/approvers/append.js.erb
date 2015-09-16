@@ -1,0 +1,4 @@
+<% @users.each do |user| %>
+  $("#issue_approver_user_ids_<%= user.id %>").remove();
+<% end %>
+$('#approvers_inputs').append('<%= escape_javascript(approvers_checkboxes(nil, @users, true)) %>');
