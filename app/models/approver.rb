@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class Approver < ActiveRecord::Base
   belongs_to :approvable, :polymorphic => true
   belongs_to :user
@@ -12,7 +14,7 @@ class Approver < ActiveRecord::Base
     objects = objects.reject(&:new_record?)
     if objects.any?
       objects.group_by {|object| object.class.base_class}.each do |base_class, objects|
-        if approver.where(:approvable_type => base_class.name, :approvable_id => objects.map(&:id), :user_id => user.id).exists?
+        if Approver.where(:approvable_type => base_class.name, :approvable_id => objects.map(&:id), :user_id => user.id).exists?
           return true
         end
       end

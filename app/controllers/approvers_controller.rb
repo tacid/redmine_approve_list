@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 class ApproversController < ApplicationController
   before_filter :require_login, :find_approvables, :only => [:approve, :unapprove]
 

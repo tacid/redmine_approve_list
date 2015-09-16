@@ -1,5 +1,5 @@
-post 'approvers/approv', :to => 'approvers#approv', :as => 'approv'
-delete 'approvers/approv', :to => 'approvers#unapprov'
+post 'approvers/approve', :to => 'approvers#approve', :as => 'approve'
+delete 'approvers/approve', :to => 'approvers#unapprove'
 get 'approvers/new', :to => 'approvers#new'
 post 'approvers', :to => 'approvers#create'
 post 'approvers/append', :to => 'approvers#append'
