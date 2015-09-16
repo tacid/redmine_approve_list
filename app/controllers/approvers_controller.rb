@@ -27,10 +27,10 @@ class ApproversController < ApplicationController
     end
     users = User.active.visible.where(:id => user_ids.flatten.compact.uniq)
     users.each do |user|
-      approver.create(:approvable => @approved, :user => user)
+      Approver.create(:approvable => @approved, :user => user)
     end
     respond_to do |format|
-      format.html { redirect_to_referer_or {render :text => 'approver added.', :layout => true}}
+      format.html { redirect_to_referer_or {render :text => 'Approver added.', :layout => true}}
       format.js { @users = users_for_new_approver }
       format.api { render_api_ok }
     end
@@ -95,7 +95,7 @@ class ApproversController < ApplicationController
       approvable.set_approver(user, approving)
     end
     respond_to do |format|
-      format.html { redirect_to_referer_or {render :text => (approving ? 'approver added.' : 'approver removed.'), :layout => true}}
+      format.html { redirect_to_referer_or {render :text => (approving ? 'Approver added.' : 'Approver removed.'), :layout => true}}
       format.js { render :partial => 'set_approver', :locals => {:user => user, :approved => approvables} }
     end
   end
