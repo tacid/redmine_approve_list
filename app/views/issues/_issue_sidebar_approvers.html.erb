@@ -1,4 +1,9 @@
 <% if @issue.is_a?(Issue) %>
+
+  <% content_for :header_tags do %>
+    <%= stylesheet_link_tag :approve_list, :plugin => 'redmine_approve_list' %>
+  <% end %>
+
   <% if User.current.allowed_to?(:add_issue_approvers, @project) ||
     (@issue.approvers.present? && User.current.allowed_to?(:view_issue_approvers, @project)) %>
     <div id="approvers">

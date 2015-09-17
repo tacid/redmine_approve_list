@@ -1,0 +1,12 @@
+#approvers select {width: 95%; display: block;}
+#approvers a.delete {opacity: 0.4; vertical-align: middle;}
+#approvers a.delete:hover {opacity: 1;}
+#approvers img.gravatar {margin: 0 4px 2px 0;}
+
+span#approvers_inputs {overflow:auto; display:block;}
+span.search_for_approvers {display:block;}
+span.search_for_approvers {font-size:80%; line-height:2.5em;}
+span.search_for_approvers a {padding-left:16px; background: url(../images/bullet_add.png) no-repeat 0 50%; }
+
+#users_for_approver {height: 200px; overflow:auto;}
+#users_for_approver label {display: block;}
