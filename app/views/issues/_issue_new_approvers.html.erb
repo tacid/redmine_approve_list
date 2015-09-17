@@ -1,8 +1,8 @@
 <% if @issue.safe_attribute? 'approver_user_ids' -%>
   <script type="text/javascript" charset="utf-8">
-    $(function(){$('div.box.tabular').append($('#approvers_form').show())})
+    $(function(){$('div.box.tabular').append($('#approvers_form'))})
   </script>
-  <p id="approvers_form" style="display: none;"><label><%= l(:label_issue_approvers) %></label>
+  <p id="approvers_form"><label><%= l(:label_issue_approvers) %></label>
   <span id="approvers_inputs">
     <%= approvers_checkboxes(@issue, users_for_new_issue_approvers(@issue)) %>
   </span>
