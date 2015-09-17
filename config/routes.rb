@@ -4,6 +4,8 @@ get 'approvers/new', :to => 'approvers#new'
 post 'approvers', :to => 'approvers#create'
 post 'approvers/append', :to => 'approvers#append'
 delete 'approvers', :to => 'approvers#destroy'
+post 'approvers/do_approve', :to => 'approvers#do_approve', :as => 'do_approve'
+delete 'approvers/do_approve', :to => 'approvers#undo_approve'
 get 'approvers/autocomplete_for_user', :to => 'approvers#autocomplete_for_user'
 # Specific routes for issue approvers API
 post 'issues/:object_id/approvers', :to => 'approvers#create', :object_type => 'issue'

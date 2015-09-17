@@ -11,6 +11,14 @@ class ApproversController < ApplicationController
     set_approver(@approvables, User.current, false)
   end
 
+  def do_approve
+    set_approver_done(true)
+  end
+  def undo_approve
+    set_approver_done(false)
+  end
+
+
   before_filter :find_project, :authorize, :only => [:new, :create, :append, :destroy, :autocomplete_for_user]
   accept_api_auth :create, :destroy
 
@@ -97,6 +105,17 @@ class ApproversController < ApplicationController
     respond_to do |format|
       format.html { redirect_to_referer_or {render :text => (approving ? 'Approver added.' : 'Approver removed.'), :layout => true}}
       format.js { render :partial => 'set_approver', :locals => {:user => user, :approved => approvables} }
+    end
+  end
+
+  def set_approver_done(is_done)
+    this = Approver.find(params[:id])
+    return unless User.current == this.user
+    this.update_attribute(:is_done, is_done)
+    @approved = this.approvable
+    respond_to do |format|
+      format.html { redirect_to_referer_or {render :text => (approving ? 'Approve done.' : 'Approve undone.'), :layout => true}}
+      format.js { render :partial => 'do_approve', :locals => {:user => this.user } }
     end
   end
 

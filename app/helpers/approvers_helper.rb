@@ -31,8 +31,9 @@ module ApproversHelper
     remove_allowed = User.current.allowed_to?("delete_#{object.class.name.underscore}_approvers".to_sym, object.project)
     content = ''.html_safe
     lis = object.approver_users.collect do |user|
+      approver = object.approvers.where(user_id: user.id).first
       s = ''.html_safe
-      s << content_tag('i', ' ', :class => 'icon ' + (object.approve_done_by?(user) ? 'icon-checked' : 'icon-warning' ))
+      s << content_tag('i', ' ', class: 'icon ' + (approver.is_done ? 'icon-fav' : 'icon-fav-off' ))
       s << avatar(user, :size => "16").to_s
       s << link_to_user(user, :class => 'user')
       if remove_allowed
@@ -44,6 +45,20 @@ module ApproversHelper
         s << ' '
         s << link_to(image_tag('delete.png'), url,
                      :remote => true, :method => 'delete', :class => "delete")
+      end
+      s << ' '
+      if approver.user == User.current
+        link = link_to( l("button_do_" + (approver.is_done ? "unapprove" : "approve")),
+                {:controller => 'approvers',
+                 :action => 'do_approve',
+                 :object_type => object.class.to_s.underscore,
+                 :object_id => object.id,
+                 :id => approver.id },
+               :remote => true, :method => (approver.is_done ? 'delete' : 'post'), :class => "do-approve")
+        s << content_tag("div", link, class: "contextual")
+      end
+      if approver.is_done
+        s << content_tag('p', "Согласовано: " + localize(approver.updated_at, format: :short))
       end
       content << content_tag('li', s, :class => "user-#{user.id}")
     end

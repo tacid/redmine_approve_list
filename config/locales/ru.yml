@@ -1,8 +1,10 @@
 # Russian strings go here for Rails i18n
 ru:
   redmine_approve_select_trackers: Выберите трекеры для плагина
-  button_unapprove: Не согласовывать
-  button_approve: Согласовывать
+  button_unapprove: Отозвать согласование
+  button_approve: Согласовать
+  button_do_unapprove: Отозвать
+  button_do_approve: Согласовать
   field_approver: Согласование
   label_issue_approvers: Список согласования
   label_approved_issues: Задачи на согласовании
