@@ -11,6 +11,8 @@ class Approver < ActiveRecord::Base
 
   before_save :force_update_at_change
 
+  scope :is_done, -> { where(is_done: true) }
+
   # Returns true if at least one object among objects is approved by user
   def self.any_approved?(objects, user)
     objects = objects.reject(&:new_record?)

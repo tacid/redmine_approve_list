@@ -32,6 +32,7 @@ module ApproversHelper
     content = ''.html_safe
     lis = object.approver_users.collect do |user|
       s = ''.html_safe
+      s << content_tag('i', ' ', :class => 'icon ' + (object.approve_done_by?(user) ? 'icon-checked' : 'icon-warning' ))
       s << avatar(user, :size => "16").to_s
       s << link_to_user(user, :class => 'user')
       if remove_allowed

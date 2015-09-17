@@ -67,6 +67,10 @@ module RedmineApproveList
           !!(user && self.approver_user_ids.detect {|uid| uid == user.id })
         end
 
+        def approve_done_by?(user)
+          !!(user && self.approver_user_ids.detect {|uid| uid == user.id } && self.approvers.is_done.select(:user_id).detect {|a| u.user_id == user.id })
+        end
+
         def notified_approvers
           notified = approver_users.active.to_a
           notified.reject! {|user| user.mail.blank? || user.mail_notification == 'none'}
