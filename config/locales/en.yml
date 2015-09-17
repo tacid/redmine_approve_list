@@ -1,5 +1,5 @@
-# Russian strings go here for Rails i18n
-ru:
+# English strings go here for Rails i18n
+en:
   redmine_approve_select_trackers: Select trackers for plugin
   button_unapprove: Unapprove
   button_approve: Approve

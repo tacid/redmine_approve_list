@@ -1,0 +1,16 @@
+<% if @issue.safe_attribute? 'approver_user_ids' -%>
+  <script type="text/javascript" charset="utf-8">
+    $(function(){$('div.box.tabular').append($('#approvers_form').show())})
+  </script>
+  <p id="approvers_form" style="display: none;"><label><%= l(:label_issue_approvers) %></label>
+  <span id="approvers_inputs">
+    <%= approvers_checkboxes(@issue, users_for_new_issue_approvers(@issue)) %>
+  </span>
+  <span class="search_for_approvers">
+  <%= link_to l(:label_search_for_approvers),
+              {:controller => 'approvers', :action => 'new', :project_id => @issue.project},
+              :remote => true,
+              :method => 'get' %>
+  </span>
+  </p>
+<% end %>
