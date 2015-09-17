@@ -9,6 +9,8 @@ class Approver < ActiveRecord::Base
   validate :validate_user
   attr_protected :id
 
+  before_save :force_update_at_change
+
   # Returns true if at least one object among objects is approved by user
   def self.any_approved?(objects, user)
     objects = objects.reject(&:new_record?)
@@ -42,6 +44,13 @@ class Approver < ActiveRecord::Base
   end
 
   private
+
+  def force_update_at_change
+    self.updated_at = current_time_from_proper_timezone
+    if new_record?
+      self.created_at = updated_at
+    end
+  end
 
   def self.prune_single_user(user, options={})
     return unless user.is_a?(User)
