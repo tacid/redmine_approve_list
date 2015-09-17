@@ -1,0 +1,3 @@
+<% if User.current.logged? %>
+  <li><%= approver_link(@issues, User.current) %></li>
+<% end %>

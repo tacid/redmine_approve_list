@@ -5,9 +5,18 @@ Rails.configuration.to_prepare do
   require_dependency 'redmine_approve_list/patches/issues_controller_patch'
   require_dependency 'redmine_approve_list/patches/issues_helper_patch'
   require_dependency 'redmine_approve_list/patches/my_helper_patch'
+  require_dependency 'redmine_approve_list/patches/context_menus_controller_patch'
   require_dependency 'redmine_approve_list/plugin_setting_helper'
 end
 
+
+
 module RedmineApproveList
   def self.settings() Setting[:plugin_redmine_approve_list] end
+
+  module Hooks
+    class ViewsLayoutsHook < Redmine::Hook::ViewListener
+      render_on :view_issues_context_menu_end, partial: "context_menu_approver"
+    end
+  end
 end
