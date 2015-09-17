@@ -1,6 +1,8 @@
+<% if @issue.is_a?(Issue) %>
   <% if User.current.allowed_to?(:add_issue_approvers, @project) ||
     (@issue.approvers.present? && User.current.allowed_to?(:view_issue_approvers, @project)) %>
     <div id="approvers">
       <%= render :partial => 'approvers/approvers', :locals => {:approved => @issue} %>
     </div>
   <% end %>
+<% end %>
