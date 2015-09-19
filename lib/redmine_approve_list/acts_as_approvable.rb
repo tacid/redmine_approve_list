@@ -56,10 +56,15 @@ module RedmineApproveList
 
         # Overrides approver_user_ids= to make user_ids uniq
         def approver_user_ids_with_uniq_ids=(user_ids)
-          if user_ids.is_a?(Array)
-            user_ids = user_ids.uniq
-          end
-          send :approver_user_ids_without_uniq_ids=, user_ids
+          user_ids = Array(user_ids).uniq.
+            reject { |id| id.blank? }.
+            reject { |id| not Array(@all_user_ids ||= User.select(:id).map(&:id)).include?(id) }
+          is_found = {}
+          approvers = self.approvers.select { |a| a.user_id == user_ids[a.index] && is_found[a.index] = true }
+          approvers += user_ids.each_with_index.map { |x, i|
+            Approver.new(user_id: x, index: i) unless is_found[i]
+          }.compact
+          send :approvers=, approvers
         end
 
         # Returns true if object is approved by +user+
