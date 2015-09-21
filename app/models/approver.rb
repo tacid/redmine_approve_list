@@ -11,6 +11,7 @@ class Approver < ActiveRecord::Base
 
   before_save :force_update_at_change
 
+  default_scope { order(:index) }
   scope :is_done, -> { where(is_done: true) }
 
   # Returns true if at least one object among objects is approved by user
@@ -39,6 +40,19 @@ class Approver < ActiveRecord::Base
     end
   end
 
+  def first_approver?
+    self.index == 0
+  end
+  def last_approver?
+    self.index == Approver.where(approvable: self.approvable).maximum(:index)
+  end
+  def prev_approver
+    find_approver(self.index-1)
+  end
+  def next_approver
+    find_approver(self.index+1)
+  end
+
   protected
 
   def validate_user
@@ -46,6 +60,11 @@ class Approver < ActiveRecord::Base
   end
 
   private
+
+  def find_approver(index)
+    Approver.find_by(approvable: self.approvable, index: index ) ||
+      Approver.new(approvable: self.approvable)
+  end
 
   def force_update_at_change
     self.updated_at = current_time_from_proper_timezone
