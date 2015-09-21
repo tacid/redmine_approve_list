@@ -56,7 +56,7 @@ module RedmineApproveList
 
         # Overrides approver_user_ids= to make user_ids uniq
         def approver_user_ids_with_uniq_ids=(user_ids)
-          user_ids = Array(user_ids).uniq.
+          user_ids = Array(user_ids).flatten.uniq.map(&:to_i).
             reject { |id| id.blank? }.
             reject { |id| not Array(@all_user_ids ||= User.select(:id).map(&:id)).include?(id) }
           is_found = {}
