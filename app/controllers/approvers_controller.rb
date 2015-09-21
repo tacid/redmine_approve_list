@@ -33,10 +33,10 @@ class ApproversController < ApplicationController
     else
       user_ids << params[:user_id]
     end
-    users = User.active.visible.where(:id => user_ids.flatten.compact.uniq)
-    users.each do |user|
-      Approver.create(:approvable => @approved, :user => user)
-    end
+    user_ids = Array(user_ids).flatten.map(&:to_i)
+    @approved.approver_user_ids=User.active.visible.
+      select(:id).where(:id => user_ids.flatten.compact.uniq).
+      index_by{|u| u.id }.values_at(*user_ids).compact.map(&:id)
     respond_to do |format|
       format.html { redirect_to_referer_or {render :text => 'Approver added.', :layout => true}}
       format.js { @users = users_for_new_approver }
@@ -55,7 +55,7 @@ class ApproversController < ApplicationController
   end
 
   def destroy
-    @approved.set_approver(User.visible.find(params[:user_id]), false)
+    #@approved.set_approver(User.visible.find(params[:user_id]), false)
     respond_to do |format|
       format.html { redirect_to :back }
       format.js
@@ -64,7 +64,7 @@ class ApproversController < ApplicationController
   end
 
   def autocomplete_for_user
-    @users = users_for_new_approver
+    @users = users_for_new_approver(false)
     render :layout => false
   end
 
@@ -119,7 +119,7 @@ class ApproversController < ApplicationController
     end
   end
 
-  def users_for_new_approver
+  def users_for_new_approver(remove_approved=true)
     scope = nil
     if params[:q].blank? && @project.present?
       scope = @project.users
@@ -127,7 +127,7 @@ class ApproversController < ApplicationController
       scope = User.all.limit(100)
     end
     users = scope.active.visible.sorted.like(params[:q]).to_a
-    if @approved
+    if @approved and remove_approved
       users -= @approved.approver_users
     end
     users
