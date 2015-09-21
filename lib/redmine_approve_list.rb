@@ -25,7 +25,7 @@ module RedmineApproveList
         detail = context[:detail]
         if detail.prop_key == "approver" then
               detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
-              detail.old_value = detail.old_value == "true" ? l("approver_done") : ""
+              detail.old_value = ""
         end
       end
 
