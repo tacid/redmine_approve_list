@@ -18,7 +18,17 @@ module RedmineApproveList
   module Hooks
     class ViewsLayoutsHook < Redmine::Hook::ViewListener
       render_on :view_issues_context_menu_end, partial: "context_menu_approver"
+      render_on :view_issues_show_description_bottom, partial: "description_bottom_approver"
       render_on :view_issues_sidebar_queries_bottom, partial: "issue_sidebar_approvers"
+
+      def helper_issues_show_detail_after_setting(context = { })
+        detail = context[:detail]
+        if detail.prop_key == "approver" then
+              detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
+              detail.old_value = detail.old_value == "true" ? l("approver_done") : ""
+        end
+      end
+
     end
   end
 end

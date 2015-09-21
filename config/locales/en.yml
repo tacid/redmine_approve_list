@@ -3,6 +3,8 @@ en:
   redmine_approve_select_trackers: Select trackers for plugin
   button_unapprove: Unapprove
   button_approve: Approve
+  button_do_unapprove: Reject
+  button_do_approve: Approve
   field_approver: Approver
   label_issue_approvers: Approvers
   label_approved_issues: Issues to approve

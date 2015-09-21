@@ -12,7 +12,7 @@ class ApproversController < ApplicationController
   end
 
   def do_approve
-    set_approver_done(true)
+    set_approver_done(params[:reject].blank? ? true : false)
   end
   def undo_approve
     set_approver_done(false)
@@ -109,13 +109,23 @@ class ApproversController < ApplicationController
   end
 
   def set_approver_done(is_done)
-    this = Approver.find(params[:id])
-    return unless User.current == this.user
-    this.update_attribute(:is_done, is_done)
-    @approved = this.approvable
+    approver = Approver.find(params[:id])
+    raise Unauthorized unless approver.can_done_by?(User.current)
+    approver.update_attribute(:is_done, is_done)
+    @approved = approver.approvable
+    @approved.approvers.update_all(is_done: false) unless is_done
+
+    notes=""
+    notes << "Done by admin for user #{approver.user}\n" if User.current.admin?
+    notes=params[:issue_notes]+"\n" unless params[:issue_notes].blank?
+
+    journal=Journal.new(notes: notes, user: User.current)
+    journal.details << JournalDetail.new(property: "attr", prop_key: "approver", old_value: (not is_done).to_s, value: is_done.to_s)
+    @approved.journals << journal
+
     respond_to do |format|
       format.html { redirect_to_referer_or {render :text => (approving ? 'Approve done.' : 'Approve undone.'), :layout => true}}
-      format.js { render :partial => 'do_approve', :locals => {:user => this.user } }
+      format.js { render :partial => 'do_approve', :locals => {:user => approver.user } }
     end
   end
 

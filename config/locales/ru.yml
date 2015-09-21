@@ -3,9 +3,11 @@ ru:
   redmine_approve_select_trackers: Выберите трекеры для плагина
   button_unapprove: Отозвать согласование
   button_approve: Согласовать
-  button_do_unapprove: Отозвать
+  button_do_unapprove: Отказать
   button_do_approve: Согласовать
   field_approver: Согласование
+  approver_done: Согласовано
+  approver_undone: Отказано в согласовании
   label_issue_approvers: Список согласования
   label_approved_issues: Задачи на согласовании
   permission_add_issue_approvers: Добавление в список согласования

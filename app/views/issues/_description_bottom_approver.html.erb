@@ -1,0 +1,21 @@
+<% if @issue and @approver = @issue.approvers.find_by(is_done: false) and @approver.can_done_by?(User.current) %>
+  <hr/>
+  <h3 class="title"><%= l(:field_approver) %></h3>
+  <%= form_tag({controller: 'approvers',
+                action: "do_approve",
+                object_type: @issue.class.to_s.underscore,
+                object_id: @issue.id,
+                id: @approver.id },
+               method: :post,
+               id: 'do-approver-form') do %>
+
+    <p class="do-approver-comment">
+    <%= text_area_tag("issue_notes", "", { rows: 5, style: "width:90%;" } ) %>
+    </p>
+
+    <p class="buttons">
+      <%= submit_tag l(:button_do_approve), :name => nil %>
+      <%= submit_tag l(:button_do_unapprove), :name => "reject" %>
+    </p>
+  <% end %>
+<% end %>

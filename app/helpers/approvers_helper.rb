@@ -52,19 +52,8 @@ module ApproversHelper
       s = ''.html_safe
       s << avatar(user, :size => "16").to_s
       s << link_to_user(user, :class => 'user')
-      s << ' '
-      if approver.user == User.current
-        link = link_to( l("button_do_" + (approver.is_done ? "unapprove" : "approve")),
-                {:controller => 'approvers',
-                 :action => 'do_approve',
-                 :object_type => object.class.to_s.underscore,
-                 :object_id => object.id,
-                 :id => approver.id },
-               :remote => true, :method => (approver.is_done ? 'delete' : 'post'), :class => "do-approve")
-        s << content_tag("div", link, class: "contextual")
-      end
       if approver.is_done
-        s << content_tag('p', "Согласовано: " + localize(approver.updated_at, format: :short))
+        s << content_tag('p', l(:approver_done) +": " + format_time(approver.updated_at))
       end
       content << content_tag('li', s, :class => "user-#{user.id}")
     end

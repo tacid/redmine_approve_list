@@ -40,10 +40,10 @@ class Approver < ActiveRecord::Base
     end
   end
 
-  def first_approver?
+  def is_first?
     self.index == 0
   end
-  def last_approver?
+  def is_last?
     self.index == Approver.where(approvable: self.approvable).maximum(:index)
   end
   def prev_approver
@@ -51,6 +51,10 @@ class Approver < ActiveRecord::Base
   end
   def next_approver
     find_approver(self.index+1)
+  end
+
+  def can_done_by?(user)
+    (self.user_id == user.id or user.admin?) and (self.is_first? or self.prev_approver.is_done?)
   end
 
   protected
