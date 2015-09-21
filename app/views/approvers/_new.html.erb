@@ -1,3 +1,21 @@
+<script type="text/javascript" charset="utf-8">
+  approve_user = function() {
+      if ($(this).prop("checked")) {
+        label=$(this).closest('label');
+        $('#users_added').append(label);
+        label.wrap('<li></li>');
+      }else{
+        label=$(this).closest('label');
+        if ( label.parent().is("li") ) { label.unwrap() }
+        $('#users_for_approver').prepend(label);
+      }
+  }
+  $(function(){
+    $('#new-approver-form input[type=checkbox]').each(approve_user)
+    $('#new-approver-form input[type=checkbox]').click(approve_user)
+  })
+</script>
+
 <h3 class="title"><%= l(:permission_add_issue_approvers) %></h3>
 
 <%= form_tag({:controller => 'approvers',
@@ -8,6 +26,11 @@
              :remote => true,
              :method => :post,
              :id => 'new-approver-form') do %>
+
+  <p><%= content_tag 'h4', l(:approved_users) %></p>
+  <ol id="users_added">
+    <%= approvers_checkboxes approved, approved.approver_users, nil, 'approver[user_ids][]' %>
+  </ol>
 
   <p><%= label_tag 'user_search', l(:label_user_search) %><%= text_field_tag 'user_search', nil %></p>
   <%= javascript_tag "observeSearchfield('user_search', 'users_for_approver', '#{ escape_javascript url_for(:controller => 'approvers',

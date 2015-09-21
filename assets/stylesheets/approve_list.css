@@ -9,4 +9,4 @@ span.search_for_approvers {font-size:80%; line-height:2.5em;}
 span.search_for_approvers a {padding-left:16px; background: url(../images/bullet_add.png) no-repeat 0 50%; }
 
 #users_for_approver {height: 200px; overflow:auto;}
-#users_for_approver label {display: block;}
+#users_for_approver label, #users_added label {display: block;}

@@ -50,19 +50,8 @@ module ApproversHelper
     lis = object.approver_users.collect do |user|
       approver = object.approvers.where(user_id: user.id).first
       s = ''.html_safe
-      s << content_tag('i', ' ', class: 'icon ' + (approver.is_done ? 'icon-fav' : 'icon-fav-off' ))
       s << avatar(user, :size => "16").to_s
       s << link_to_user(user, :class => 'user')
-      if remove_allowed
-        url = {:controller => 'approvers',
-               :action => 'destroy',
-               :object_type => object.class.to_s.underscore,
-               :object_id => object.id,
-               :user_id => user}
-        s << ' '
-        s << link_to(image_tag('delete.png'), url,
-                     :remote => true, :method => 'delete', :class => "delete")
-      end
       s << ' '
       if approver.user == User.current
         link = link_to( l("button_do_" + (approver.is_done ? "unapprove" : "approve")),
@@ -79,15 +68,15 @@ module ApproversHelper
       end
       content << content_tag('li', s, :class => "user-#{user.id}")
     end
-    content.present? ? content_tag('ul', content, :class => 'approvers') : content
+    content.present? ? content_tag('ol', content, :class => 'approvers') : content
   end
 
-  def approvers_checkboxes(object, users, checked=nil)
+  def approvers_checkboxes(object, users, checked=nil, name="issue[approvers][]")
     users.map do |user|
       c = checked.nil? ? object.approved_by?(user) : checked
-      tag = check_box_tag 'issue[approver_user_ids][]', user.id, c, :id => nil
+      tag = check_box_tag(name, user.id, c, :id => nil)
       content_tag 'label', "#{tag} #{h(user)}".html_safe,
-                  :id => "issue_approver_user_ids_#{user.id}",
+                  :id => "#{name.parameterize("_")}_#{user.id}",
                   :class => "floating"
     end.join.html_safe
   end

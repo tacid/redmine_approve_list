@@ -1,1 +1,11 @@
 <%= principals_check_box_tags 'approver[user_ids][]', @users %>
+<script type="text/javascript" charset="utf-8">
+  $(function(){
+    $('#users_for_approver input[type=checkbox]').each(function(){
+      if ($('#users_added input[type=checkbox][value="'+$(this).val()+'"]').val()) {
+        $(this).closest('label').remove();
+      }
+    });
+    $('#users_for_approver input[type=checkbox]').click(approve_user);
+  })
+</script>
