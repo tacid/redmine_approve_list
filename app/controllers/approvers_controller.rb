@@ -34,9 +34,19 @@ class ApproversController < ApplicationController
       user_ids << params[:user_id]
     end
     user_ids = Array(user_ids).flatten.map(&:to_i)
-    @approved.approver_user_ids=User.active.visible.
+    user_ids = User.active.visible.
       select(:id).where(:id => user_ids.flatten.compact.uniq).
       index_by{|u| u.id }.values_at(*user_ids).compact.map(&:id)
+
+    if user_ids != (old_user_ids = @approved.approver_user_ids) then
+      @approved.approver_user_ids=user_ids
+      if user_ids == @approved.approver_user_ids then
+        journal=Journal.new(notes: "", user: User.current)
+        journal.details << JournalDetail.new(property: "attr", prop_key: "approver_users", old_value: old_user_ids.to_json, value: user_ids.to_json)
+        @approved.journals << journal
+      end
+    end
+
     respond_to do |format|
       format.html { redirect_to_referer_or {render :text => 'Approver added.', :layout => true}}
       format.js { @users = users_for_new_approver }

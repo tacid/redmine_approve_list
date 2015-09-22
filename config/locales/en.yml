@@ -6,6 +6,9 @@ en:
   button_do_unapprove: Reject
   button_do_approve: Approve
   field_approver: Approver
+  field_approver_users: Список согласования
+  approver_done: Approved
+  approver_undone: Rejected
   label_issue_approvers: Approvers
   label_approved_issues: Issues to approve
   permission_add_issue_approvers: Add issue approvers

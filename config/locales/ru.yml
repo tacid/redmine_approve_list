@@ -6,6 +6,7 @@ ru:
   button_do_unapprove: Отказать
   button_do_approve: Согласовать
   field_approver: Согласование
+  field_approver_users: Список согласования
   approver_done: Согласовано
   approver_undone: Отказано в согласовании
   label_issue_approvers: Список согласования

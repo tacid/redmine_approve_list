@@ -24,8 +24,15 @@ module RedmineApproveList
       def helper_issues_show_detail_after_setting(context = { })
         detail = context[:detail]
         if detail.prop_key == "approver" then
-              detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
-              detail.old_value = ""
+          detail.old_value = ""
+          detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
+        elsif detail.prop_key == "approver_users"
+          if /\[[0-9,]*\]/ =~ detail.old_value and /\[[0-9,]*\]/ =~ detail.value
+            old_uids = Array(JSON.parse(detail.old_value))
+            cur_uids = Array(JSON.parse(detail.value))
+            detail.old_value = (old_uids.empty? ? "" : User.where(id: old_uids).join(', ') )
+            detail.value =     (cur_uids.empty? ? "" : User.where(id: cur_uids).join(', ') )
+          end
         end
       end
 
