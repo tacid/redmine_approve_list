@@ -1,3 +1,0 @@
-<% if User.current.logged? && Approver.any_approved?(@issues, User.current) %>
-  <li><%= do_approve_link(@issues, User.current) %></li>
-<% end %>
