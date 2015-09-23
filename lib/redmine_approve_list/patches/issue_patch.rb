@@ -16,6 +16,20 @@ module RedmineApproveList
       end
 
       module InstanceMethods
+
+        def current_approver
+          @current_approver ||= self.approvers.find_by(is_done: false)
+        end
+
+        def can_be_approved_by?(user=User.current)
+          return false unless User.allowed_to(:do_approve_issue).include?(user)
+          return self.current_approver.can_done_by?(user)
+        end
+
+        def is_approver_on?
+          Setting[:plugin_redmine_approve_list][:tracker_ids].include?(self.tracker_id.to_s)
+        end
+
         def is_approver_active?
           return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
           return statuses[:active].to_i == self.status_id

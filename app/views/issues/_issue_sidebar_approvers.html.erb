@@ -1,4 +1,4 @@
-<% if @issue.is_a?(Issue) %>
+<% if @issue.is_a?(Issue) and @issue.is_approver_on? %>
 
   <% content_for :header_tags do %>
     <%= stylesheet_link_tag :approve_list, plugin: 'redmine_approve_list' %>
