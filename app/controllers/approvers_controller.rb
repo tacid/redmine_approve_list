@@ -130,16 +130,21 @@ class ApproversController < ApplicationController
 
     approver.update_attribute(:is_done, is_done)
 
+    # REJECT and all DONE actions
+    status_was = @approved.status_was
     @approved.approver_reject! unless is_done
     @approved.approver_done! if is_done and approver.is_last?
+    status = @approved.status
 
+    # JOURNALING
     notes=""
     notes << "Done by admin for user #{approver.user}\n" if User.current.admin?
     notes=params[:issue_notes]+"\n" unless params[:issue_notes].blank?
-
     journal=Journal.new(notes: notes, user: User.current)
     journal.details << JournalDetail.new(property: "attr", prop_key: "approver", old_value: (not is_done).to_s, value: is_done.to_s)
+    journal.details << JournalDetail.new(property: "attr", prop_key: "status", old_value: status_was, value: status) if status != status_was
     @approved.journals << journal
+
 
     respond_to do |format|
       format.html { redirect_to_referer_or {render :text => (approving ? 'Approve done.' : 'Approve undone.'), :layout => true}}
