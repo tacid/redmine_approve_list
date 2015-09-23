@@ -120,11 +120,18 @@ class ApproversController < ApplicationController
 
   def set_approver_done(is_done)
     approver = Approver.find(params[:id])
-    raise Unauthorized unless approver.can_done_by?(User.current)
-    approver.update_attribute(:is_done, is_done)
     @approved = approver.approvable
+    unless @approved.is_approver_active?
+      flash[:error] = l(:error_approver_is_not_active)
+      redirect_to @approved
+      return
+    end
+    raise Unauthorized unless approver.can_done_by?(User.current)
+
+    approver.update_attribute(:is_done, is_done)
 
     @approved.approver_reject! unless is_done
+    @approved.approver_done! if is_done and approver.is_last?
 
     notes=""
     notes << "Done by admin for user #{approver.user}\n" if User.current.admin?

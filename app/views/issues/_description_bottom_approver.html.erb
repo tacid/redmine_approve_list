@@ -1,4 +1,5 @@
-<% if @issue and @approver = @issue.approvers.find_by(is_done: false) and @approver.can_done_by?(User.current) %>
+<% if @issue and @issue.is_approver_active? and
+     @approver = @issue.approvers.find_by(is_done: false) and @approver.can_done_by?(User.current) %>
   <hr/>
   <h3 class="title"><%= l(:field_approver) %></h3>
   <%= form_tag({controller: 'approvers',

@@ -1,4 +1,5 @@
-<% if User.current.allowed_to?(:add_issue_approvers, approved.project) %>
+<% if User.current.allowed_to?(:add_issue_approvers, approved.project) and
+     not approved.is_approver_active? and approved.status_approver_done != approved.status_id %>
 <div class="contextual">
   <%= link_to approved.approver_users.size == 0 ? l(:button_add) : l(:button_change),
       {:controller => 'approvers', :action => 'new', :object_type => approved.class.name.underscore, :object_id => approved},
