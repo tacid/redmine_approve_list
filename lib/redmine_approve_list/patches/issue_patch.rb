@@ -22,6 +22,7 @@ module RedmineApproveList
         end
 
         def can_be_approved_by?(user=User.current)
+          return false unless is_approver_on?
           return false unless User.allowed_to(:do_approve_issue).include?(user)
           return self.current_approver.can_done_by?(user)
         end
@@ -31,12 +32,14 @@ module RedmineApproveList
         end
 
         def is_approver_active?
+          return false unless is_approver_on?
           return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
           return statuses[:active].to_i == self.status_id
         end
 
         %w(active reject done).each do |method|
           define_method "status_approver_#{method}" do
+            return false unless is_approver_on?
             return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
             return statuses[method].blank? ? false : statuses[method].to_i
           end
