@@ -16,8 +16,8 @@ en:
   approver_undone: Rejected
   label_issue_approvers: Approvers
   label_approved_issues: Issues to approve
-  permission_add_issue_approvers: Add issue approvers
+  permission_add_issue_approvers: Change issue approvers
   permission_view_issue_approvers: View issue approvers
-  permission_delete_issue_approvers: Delete issue approvers
+  permission_do_approve_issue: Issue approving
   label_search_for_approvers: Search for approvers
   error_approver_is_not_active: Can't be approved on this issue status

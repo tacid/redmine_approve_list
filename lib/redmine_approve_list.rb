@@ -5,7 +5,6 @@ Rails.configuration.to_prepare do
   require_dependency 'redmine_approve_list/patches/issues_controller_patch'
   require_dependency 'redmine_approve_list/patches/issues_helper_patch'
   require_dependency 'redmine_approve_list/patches/my_helper_patch'
-  require_dependency 'redmine_approve_list/patches/context_menus_controller_patch'
   require_dependency 'redmine_approve_list/patches/issue_query_patch'
   require_dependency 'redmine_approve_list/plugin_setting_helper'
 end

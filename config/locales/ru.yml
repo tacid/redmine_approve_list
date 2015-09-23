@@ -16,8 +16,8 @@ ru:
   approver_undone: Отказано в согласовании
   label_issue_approvers: Список согласования
   label_approved_issues: Задачи на согласовании
-  permission_add_issue_approvers: Добавление в список согласования
+  permission_add_issue_approvers: Изменение списка согласования
   permission_view_issue_approvers: Просмотр списка согласования
-  permission_delete_issue_approvers: Удаление со списка согласования
+  permission_do_approve_issue: Согласование документа
   label_search_for_approvers: Найти участников для согласования
   error_approver_is_not_active: Согласование невозможно на данном статуce

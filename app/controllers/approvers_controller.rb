@@ -34,7 +34,7 @@ class ApproversController < ApplicationController
       user_ids << params[:user_id]
     end
     user_ids = Array(user_ids).flatten.map(&:to_i)
-    user_ids = User.active.visible.
+    user_ids = User.active.visible.allowed_to(:do_approve_issue).
       select(:id).where(:id => user_ids.flatten.compact.uniq).
       index_by{|u| u.id }.values_at(*user_ids).compact.map(&:id)
 
@@ -150,9 +150,9 @@ class ApproversController < ApplicationController
   def users_for_new_approver(remove_approved=true)
     scope = nil
     if params[:q].blank? && @project.present?
-      scope = @project.users
+      scope = @project.users.allowed_to(:do_approve_issue)
     else
-      scope = User.all.limit(100)
+      scope = User.allowed_to(:do_approve_issue).limit(100)
     end
     users = scope.active.visible.sorted.like(params[:q]).to_a
     if @approved and remove_approved

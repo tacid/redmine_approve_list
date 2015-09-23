@@ -8,6 +8,14 @@ module RedmineApproveList
         base.class_eval do
           unloadable
           alias_method_chain :remove_references_before_destroy, :approve
+
+          # returns users for given permission
+          def self.allowed_to(permission)
+            includes(members: [:roles]).
+              where(roles: {
+                id: Role.where(Role.arel_table[:permissions].matches("%#{permission}%")).uniq
+              }).uniq
+          end
         end
       end
 

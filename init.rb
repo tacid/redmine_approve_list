@@ -14,8 +14,7 @@ Redmine::Plugin.register :redmine_approve_list do
     map.project_module :issue_tracking do |map|
       map.permission :view_issue_approvers, {}, :read => true
       map.permission :add_issue_approvers, {:approvers => [:new, :create, :append, :autocomplete_for_user]}
-      map.permission :delete_issue_approvers, {:approvers => :destroy}
-      map.permission :import_issues, {:imports => [:new, :create, :settings, :mapping, :run, :show]}
+      map.permission :do_approve_issue, {:approvers => [:do_approve, :undo_approve]}
     end
   end
 

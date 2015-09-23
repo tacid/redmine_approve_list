@@ -45,7 +45,6 @@ module ApproversHelper
 
   # Returns a comma separated list of users approving the given object
   def approvers_list(object)
-    remove_allowed = User.current.allowed_to?("delete_#{object.class.name.underscore}_approvers".to_sym, object.project)
     content = ''.html_safe
     lis = object.approver_users.collect do |user|
       approver = object.approvers.where(user_id: user.id).first
