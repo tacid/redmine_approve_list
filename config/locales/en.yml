@@ -1,5 +1,10 @@
 # English strings go here for Rails i18n
 en:
+  setting_plugin_approve_list:
+  setting_approve_reject_state: Reject state
+  setting_approve_active_state: Working state
+  setting_approve_done_state: Done state
+  setting_approve_trackers: Trackers
   redmine_approve_select_trackers: Select trackers for plugin
   button_unapprove: Unapprove
   button_approve: Approve

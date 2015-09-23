@@ -1,7 +1,37 @@
-<p><%=
-plugin_setting_multiselect(
-  :plugin_redmine_approve_list,
-  :approve_tracker_ids,
-  Tracker.sorted.collect {|t| [t.name, t.id.to_s]},
-  { label: :redmine_approve_select_trackers })
-%></p>
+<h3 class="title"><%= l(:setting_plugin_approve_list) %></h3>
+<%= hidden_field_tag('settings[tracker_ids][]',"") %>
+<table style="width: 100%;">
+  <thead>
+    <tr>
+      <th><%= l(:setting_approve_trackers) %></th>
+      <th><%= l(:setting_approve_reject_state) %></th>
+      <th><%= l(:setting_approve_active_state) %></th>
+      <th><%= l(:setting_approve_done_state) %></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% Tracker.sorted.each do |tr|
+  statuses = [['Не выбран',nil]] +tr.issue_statuses.map {|s| [s.name, s.id] }
+  settings["tracker_#{tr.id}"] = {} if settings["tracker_#{tr.id}"].nil?
+  %>
+    <tr>
+      <th style="padding-left: 5%;"><%=
+        content_tag('label',
+          check_box_tag(
+             "settings[tracker_ids][]", tr.id.to_s,
+             (is_enabled_tracker=settings[:tracker_ids].include?(tr.id.to_s)), :id => nil
+           ) + tr.name.to_s,
+          :class => 'block')
+      %></th>
+      <% %w(reject active done).each do |status| %>
+      <td style="text-align: center;">
+        <%= select_tag("settings[tracker_#{tr.id}][#{status}]",
+                       options_for_select(statuses, settings["tracker_#{tr.id}"][status]),
+                       class: "select-status", disabled: (not is_enabled_tracker),
+                      ) %>
+      </td>
+      <% end %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

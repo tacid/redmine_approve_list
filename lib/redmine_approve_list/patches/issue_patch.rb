@@ -16,6 +16,27 @@ module RedmineApproveList
       end
 
       module InstanceMethods
+        def is_approver_active?
+          return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
+          return statuses[:active].to_i == self.status_id
+        end
+
+        %w(active reject done).each do |method|
+          define_method "status_approver_#{method}" do
+            return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
+            return statuses[method].blank? ? false : statuses[method].to_i
+          end
+        end
+
+        def approver_reject!
+          self.approvers.update_all(is_done: false)
+          self.update_attributes(status_id: status_approver_reject) if status_approver_reject
+        end
+
+        def approver_done!
+          self.update_attributes(status_id: status_approver_done) if status_approver_done
+        end
+
       end
 
     end

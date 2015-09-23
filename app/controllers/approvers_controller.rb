@@ -123,7 +123,8 @@ class ApproversController < ApplicationController
     raise Unauthorized unless approver.can_done_by?(User.current)
     approver.update_attribute(:is_done, is_done)
     @approved = approver.approvable
-    @approved.approvers.update_all(is_done: false) unless is_done
+
+    @approved.approver_reject! unless is_done
 
     notes=""
     notes << "Done by admin for user #{approver.user}\n" if User.current.admin?

@@ -1,5 +1,10 @@
 # Russian strings go here for Rails i18n
 ru:
+  setting_plugin_approve_list: Настройки плагина согласования
+  setting_approve_reject_state: Статус отказа
+  setting_approve_active_state: Статус для работы
+  setting_approve_done_state: Статус согласовано
+  setting_approve_trackers: Рабочие трэкеры
   redmine_approve_select_trackers: Выберите трекеры для плагина
   button_unapprove: Отозвать согласование
   button_approve: Согласовать

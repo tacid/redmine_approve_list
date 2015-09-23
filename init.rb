@@ -20,6 +20,6 @@ Redmine::Plugin.register :redmine_approve_list do
   end
 
   settings default: {
-    approve_tracker_ids: Tracker.all.map{|t| t.id.to_s},
+    tracker_ids: Tracker.all.map{|t| t.id.to_s},
   }, partial: 'settings/redmine_approve_list_settings'
 end
