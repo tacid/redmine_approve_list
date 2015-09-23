@@ -21,3 +21,5 @@ ru:
   permission_do_approve_issue: Согласование документа
   label_search_for_approvers: Найти участников для согласования
   error_approver_is_not_active: Согласование невозможно на данном статуce
+  need_approval: Требуется согласование
+  text_need_approval: Документ %{id} требует вашего согласования

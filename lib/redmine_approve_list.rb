@@ -6,6 +6,7 @@ Rails.configuration.to_prepare do
   require_dependency 'redmine_approve_list/patches/issues_helper_patch'
   require_dependency 'redmine_approve_list/patches/my_helper_patch'
   require_dependency 'redmine_approve_list/patches/issue_query_patch'
+  require_dependency 'redmine_approve_list/patches/mailer_patch'
   require_dependency 'redmine_approve_list/plugin_setting_helper'
 end
 
@@ -23,8 +24,10 @@ module RedmineApproveList
       def helper_issues_show_detail_after_setting(context = { })
         detail = context[:detail]
         if detail.prop_key == "approver" then
-          detail.old_value = ""
-          detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
+          if detail.value.in?(%w(true false))
+            detail.old_value = ""
+            detail.value = detail.value == "true" ?  l("approver_done") : l("approver_undone")
+          end
         elsif detail.prop_key == "approver_users"
           if /\[[0-9,]*\]/ =~ detail.old_value and /\[[0-9,]*\]/ =~ detail.value
             old_uids = Array(JSON.parse(detail.old_value))
@@ -35,6 +38,20 @@ module RedmineApproveList
         end
       end
 
+
+      def controller_issues_edit_before_save(context={})
+        @status_id_was = context[:issue].status_id_was
+      end
+
+      def controller_issues_edit_after_save(context={})
+        # Check if the status changed
+        return if @status_id_was == context[:issue].status_id
+
+        # Send notification to first approver if new status is approver active status
+        context[:issue].approvers.find_by(is_done: false).send_notification if context[:issue].is_approver_active?
+      end
+
     end
   end
 end
+

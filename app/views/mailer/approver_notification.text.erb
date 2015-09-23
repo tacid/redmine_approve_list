@@ -1,0 +1,4 @@
+<%= l(:text_need_approval, :id => "##{@issue.id}") %>
+
+----------------------------------------
+<%= render :partial => 'issue', :formats => [:text], :locals => { :issue => @issue, :users => @users, :issue_url => @issue_url } %>

@@ -45,6 +45,7 @@ module RedmineApproveList
         def approver_reject!
           self.approvers.update_all(is_done: false)
           self.update_attributes(status_id: status_approver_reject) if status_approver_reject
+          self.approvers.first.send_notification unless status_approver_reject
         end
 
         def approver_done!

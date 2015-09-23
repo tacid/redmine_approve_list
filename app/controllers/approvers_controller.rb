@@ -129,6 +129,7 @@ class ApproversController < ApplicationController
     raise Unauthorized unless approver.can_done_by?(User.current)
 
     approver.update_attribute(:is_done, is_done)
+    approver.next_approver.send_notification if is_done and not approver.is_last?
 
     # REJECT and all DONE actions
     status_was = @approved.status_was

@@ -57,6 +57,10 @@ class Approver < ActiveRecord::Base
     (self.user_id == user.id or user.admin?) and (self.is_first? or self.prev_approver.is_done?)
   end
 
+  def send_notification
+    Mailer.deliver_approver_notification(self)
+  end
+
   protected
 
   def validate_user
@@ -71,9 +75,9 @@ class Approver < ActiveRecord::Base
   end
 
   def force_update_at_change
-    self.updated_at = current_time_from_proper_timezone
+    self.updated_on = current_time_from_proper_timezone
     if new_record?
-      self.created_at = updated_at
+      self.created_on = updated_on
     end
   end
 

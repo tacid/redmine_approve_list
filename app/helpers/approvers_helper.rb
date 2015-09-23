@@ -52,7 +52,7 @@ module ApproversHelper
       s << avatar(user, :size => "16").to_s
       s << link_to_user(user, :class => 'user')
       if approver.is_done
-        s << content_tag('p', l(:approver_done) +": " + format_time(approver.updated_at))
+        s << content_tag('p', l(:approver_done) +": " + format_time(approver.updated_on))
       end
       content << content_tag('li', s, :class => "user-#{user.id}")
     end
