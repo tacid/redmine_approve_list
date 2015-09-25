@@ -1,7 +1,6 @@
 # encoding: utf-8
-
+# Helper for approve list
 module ApproversHelper
-
   def approver_link(objects, user)
     return '' unless user && user.logged?
     objects = Array.wrap(objects)
@@ -11,12 +10,12 @@ module ApproversHelper
     css = [approver_css(objects), approved ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ')
     text = approved ? l(:button_unapprove) : l(:button_approve)
     url = approve_path(
-      :object_type => objects.first.class.to_s.underscore,
-      :object_id => (objects.size == 1 ? objects.first.id : objects.map(&:id).sort)
+      object_type: objects.first.class.to_s.underscore,
+      object_id: (objects.size == 1 ? objects.first.id : objects.map(&:id).sort)
     )
     method = approved ? 'delete' : 'post'
 
-    link_to text, url, :remote => true, :method => method, :class => css
+    link_to text, url, remote: true, method: method, class: css
   end
 
   def do_approve_link(objects, user)
@@ -28,12 +27,12 @@ module ApproversHelper
     css = [approver_css(objects), approved ? 'icon icon-fav' : 'icon icon-fav-off'].join(' ')
     text = approved ? l(:button_unapprove) : l(:button_approve)
     url = approve_path(
-      :object_type => objects.first.class.to_s.underscore,
-      :object_id => (objects.size == 1 ? objects.first.id : objects.map(&:id).sort)
+      object_type: objects.first.class.to_s.underscore,
+      object_id: (objects.size == 1 ? objects.first.id : objects.map(&:id).sort)
     )
     method = approved ? 'delete' : 'post'
 
-    link_to text, url, :remote => true, :method => method, :class => css
+    link_to text, url, remote: true, method: method, class: css
   end
 
   # Returns the css class used to identify approve links for a given +object+
@@ -49,23 +48,23 @@ module ApproversHelper
     lis = object.approver_users.collect do |user|
       approver = object.approvers.where(user_id: user.id).first
       s = ''.html_safe
-      s << avatar(user, :size => "16").to_s
-      s << link_to_user(user, :class => 'user')
+      s << avatar(user, size: "16").to_s
+      s << link_to_user(user, class: 'user')
       if approver.is_done
         s << content_tag('p', l(:approver_done) +": " + format_time(approver.updated_on))
       end
-      content << content_tag('li', s, :class => "user-#{user.id}")
+      content << content_tag('li', s, class: "user-#{user.id}")
     end
-    content.present? ? content_tag('ol', content, :class => 'approvers') : content
+    content.present? ? content_tag('ol', content, class: 'approvers') : content
   end
 
   def approvers_checkboxes(object, users, checked=nil, name="issue[approvers][]")
     users.map do |user|
       c = checked.nil? ? object.approved_by?(user) : checked
-      tag = check_box_tag(name, user.id, c, :id => nil)
+      tag = check_box_tag(name, user.id, c, id: nil)
       content_tag 'label', "#{tag} #{h(user)}".html_safe,
-                  :id => "#{name.parameterize("_")}_#{user.id}",
-                  :class => "floating"
+                  id: "#{name.parameterize("_")}_#{user.id}",
+                  class: "floating"
     end.join.html_safe
   end
 end

@@ -9,4 +9,3 @@ delete 'approvers/do_approve', to: 'approvers#undo_approve'
 get 'approvers/autocomplete_for_user', to: 'approvers#autocomplete_for_user'
 # Specific routes for issue approvers API
 post 'issues/:object_id/approvers', to: 'approvers#create', object_type: 'issue'
-delete 'issues/:object_id/approvers/:user_id' => 'approvers#destroy', object_type: 'issue'

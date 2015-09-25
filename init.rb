@@ -13,12 +13,12 @@ Redmine::Plugin.register :redmine_approve_list do
   Redmine::AccessControl.map do |perm|
     perm.project_module :issue_tracking do |map|
       map.permission :view_issue_approvers, {}, read: true
-      map.permission :add_issue_approvers, approvers: [:new, :create, :append, :autocomplete_for_user]
-      map.permission :do_approve_issue, approvers: [:do_approve, :undo_approve]
+      map.permission :add_issue_approvers, approvers: [:create, :autocomplete_for_user]
+      map.permission :do_approve_issue,    approvers: [:do_approve, :undo_approve]
     end
   end
 
   settings default: {
-    tracker_ids: Tracker.all.map{ |t| t.id.to_s }
+    tracker_ids: Tracker.all.map { |t| t.id.to_s }
   }, partial: 'settings/redmine_approve_list_settings'
 end
