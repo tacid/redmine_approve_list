@@ -45,26 +45,26 @@ module ApproversHelper
   # Returns a comma separated list of users approving the given object
   def approvers_list(object)
     content = ''.html_safe
-    lis = object.approver_users.collect do |user|
+    object.approver_users.each do |user|
       approver = object.approvers.where(user_id: user.id).first
       s = ''.html_safe
-      s << avatar(user, size: "16").to_s
+      s << avatar(user, size: '16').to_s
       s << link_to_user(user, class: 'user')
       if approver.is_done
-        s << content_tag('p', l(:approver_done) +": " + format_time(approver.updated_on))
+        s << content_tag('p', l(:approver_done) + ': ' + format_time(approver.updated_on))
       end
       content << content_tag('li', s, class: "user-#{user.id}")
     end
     content.present? ? content_tag('ol', content, class: 'approvers') : content
   end
 
-  def approvers_checkboxes(object, users, checked=nil, name="issue[approvers][]")
+  def approvers_checkboxes(object, users, checked = nil, name = 'issue[approvers][]')
     users.map do |user|
       c = checked.nil? ? object.approved_by?(user) : checked
       tag = check_box_tag(name, user.id, c, id: nil)
       content_tag 'label', "#{tag} #{h(user)}".html_safe,
-                  id: "#{name.parameterize("_")}_#{user.id}",
-                  class: "floating"
+                  id: "#{name.parameterize('_')}_#{user.id}",
+                  class: 'floating'
     end.join.html_safe
   end
 end

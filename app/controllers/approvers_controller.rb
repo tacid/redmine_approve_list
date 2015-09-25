@@ -1,7 +1,8 @@
 # encoding: utf-8
-
+# Approvers Controller
 class ApproversController < ApplicationController
-  before_filter :require_login, :find_approvables, :only => [:approve, :unapprove]
+  before_filter :require_login, :find_approvables, only: [:approve, :unapprove]
+  before_filter :find_project, :authorize, only: [:create, :autocomplete_for_user]
 
   def approve
     set_approver(@approvables, User.current, true)
@@ -14,12 +15,11 @@ class ApproversController < ApplicationController
   def do_approve
     set_approver_done(params[:reject].blank? ? true : false)
   end
+
   def undo_approve
     set_approver_done(false)
   end
 
-
-  before_filter :find_project, :authorize, :only => [:new, :create, :append, :destroy, :autocomplete_for_user]
   accept_api_auth :create, :destroy
 
   def new
@@ -34,9 +34,9 @@ class ApproversController < ApplicationController
       user_ids << params[:user_id]
     end
     user_ids = Array(user_ids).flatten.map(&:to_i)
-    user_ids = User.active.visible.allowed_to(:do_approve_issue).
-      select(:id).where(:id => user_ids.flatten.compact.uniq).
-      index_by{|u| u.id }.values_at(*user_ids).compact.map(&:id)
+    user_ids = User.active.visible.allowed_to(:do_approve_issue)
+                  .select(:id).where(id: user_ids.flatten.compact.uniq)
+                  .index_by{|u| u.id }.values_at(*user_ids).compact.map(&:id)
 
     if user_ids != (old_user_ids = @approved.approver_user_ids) then
       @approved.approver_user_ids=user_ids
@@ -48,7 +48,7 @@ class ApproversController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { redirect_to_referer_or {render :text => 'Approver added.', :layout => true}}
+      format.html { redirect_to_referer_or {render text: 'Approver added.', layout: true}}
       format.js { @users = users_for_new_approver }
       format.api { render_api_ok }
     end
@@ -57,10 +57,10 @@ class ApproversController < ApplicationController
   def append
     if params[:approver].is_a?(Hash)
       user_ids = params[:approver][:user_ids] || [params[:approver][:user_id]]
-      @users = User.active.visible.where(:id => user_ids).to_a
+      @users = User.active.visible.where(id: user_ids).to_a
     end
     if @users.blank?
-      render :nothing => true
+      render nothing: true
     end
   end
 
@@ -75,7 +75,7 @@ class ApproversController < ApplicationController
 
   def autocomplete_for_user
     @users = users_for_new_approver(false)
-    render :layout => false
+    render layout: false
   end
 
   private
@@ -96,7 +96,7 @@ class ApproversController < ApplicationController
   def find_approvables
     klass = Object.const_get(params[:object_type].camelcase) rescue nil
     if klass && klass.respond_to?('approved_by')
-      @approvables = klass.where(:id => Array.wrap(params[:object_id])).to_a
+      @approvables = klass.where(id: Array.wrap(params[:object_id])).to_a
       raise Unauthorized if @approvables.any? {|w|
         if w.respond_to?(:visible?)
           !w.visible?
@@ -113,8 +113,8 @@ class ApproversController < ApplicationController
       approvable.set_approver(user, approving)
     end
     respond_to do |format|
-      format.html { redirect_to_referer_or {render :text => (approving ? 'Approver added.' : 'Approver removed.'), :layout => true}}
-      format.js { render :partial => 'set_approver', :locals => {:user => user, :approved => approvables} }
+      format.html { redirect_to_referer_or {render text: (approving ? 'Approver added.' : 'Approver removed.'), layout: true}}
+      format.js { render partial: 'set_approver', locals: {user: user, approved: approvables} }
     end
   end
 
@@ -148,8 +148,8 @@ class ApproversController < ApplicationController
 
 
     respond_to do |format|
-      format.html { redirect_to_referer_or {render :text => (approving ? 'Approve done.' : 'Approve undone.'), :layout => true}}
-      format.js { render :partial => 'do_approve', :locals => {:user => approver.user } }
+      format.html { redirect_to_referer_or { render text: (approving ? 'Approve done.' : 'Approve undone.'), layout: true } }
+      format.js { render partial: 'do_approve', locals: { user: approver.user } }
     end
   end
 
