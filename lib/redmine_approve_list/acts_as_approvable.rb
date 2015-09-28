@@ -17,6 +17,14 @@ module RedmineApproveList
               joins(:approvers).
               where("#{Approver.table_name}.user_id = ?", user_id)
             }
+            scope :need_approval_by, lambda { |user_id|
+              joins(:approvers)
+              .where("")
+              .where(approvers: {
+                id: Approver.where("#{Approver.table_name}.'index' = (SELECT MIN(a2.'index') from #{Approver.table_name} as a2 where a2.is_done=? and a2.approvable_type=approvers.approvable_type AND a2.approvable_id=approvers.approvable_id)",false),
+                user_id: user_id
+              })
+            }
             attr_protected :approver_ids, :approver_user_ids
           end
           send :include, RedmineApproveList::Acts::Approvable::InstanceMethods

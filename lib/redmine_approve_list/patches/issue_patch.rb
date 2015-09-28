@@ -12,6 +12,20 @@ module RedmineApproveList
 
           safe_attributes 'approver_user_ids',
             :if => lambda {|issue, user| issue.new_record? && user.allowed_to?(:add_issue_approvers, issue.project)}
+
+          def self.on_active_approval
+            @query_params = []
+            @active_query = Setting[:plugin_redmine_approve_list]["tracker_ids"].map { |tid|
+              if ( @tracker_ids ||= Tracker.all.pluck(:id) ).include?(tid.to_i)
+                if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{tid}"]) and (active_sid = statuses[:active].to_i) > 0
+                  @query_params << tid.to_i
+                  @query_params << active_sid
+                  "(#{Issue.table_name}.tracker_id = ? AND #{Issue.table_name}.status_id = ?)"
+                end
+              end
+            }.compact.join(" OR ")
+            where(@active_query, *@query_params)
+          end
         end
       end
 

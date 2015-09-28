@@ -1,7 +1,7 @@
 <h3>
   <%= link_to l(:label_approved_issues),
         issues_path(:set_filter => 1, :approver_id => 'me', :sort => 'updated_on:desc') %>
-  (<%= Issue.visible.approved_by(user.id).count %>)
+  (<%= Issue.visible.on_active_approval.need_approval_by(user.id).count %>)
 </h3>
 
 <% approved_issues = issuesapproved_items %>
