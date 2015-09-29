@@ -17,7 +17,6 @@ module RedmineApproveList
 
   module Hooks
     class ViewsLayoutsHook < Redmine::Hook::ViewListener
-      render_on :view_issues_context_menu_end, partial: "context_menu_approver"
       render_on :view_issues_show_description_bottom, partial: "description_bottom_approver"
       render_on :view_issues_sidebar_queries_bottom, partial: "issue_sidebar_approvers"
 
