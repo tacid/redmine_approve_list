@@ -2,7 +2,7 @@
 # Approvers Controller
 class ApproversController < ApplicationController
   before_filter :require_login, :find_approvables, only: [:approve, :unapprove]
-  before_filter :find_project, :authorize, only: [:create, :autocomplete_for_user]
+  before_filter :find_project, :authorize, only: [:do_approve, :undo_approve, :new, :create, :append, :destroy, :autocomplete_for_user]
 
   def approve
     set_approver(@approvables, User.current, true)
@@ -57,7 +57,9 @@ class ApproversController < ApplicationController
   def append
     if params[:approver].is_a?(Hash)
       user_ids = params[:approver][:user_ids] || [params[:approver][:user_id]]
-      @users = User.active.visible.where(id: user_ids).to_a
+      @users = User.active.visible
+        .allowed_to(:do_approve_issue)
+        .where(id: user_ids).to_a
     end
     if @users.blank?
       render nothing: true
@@ -120,7 +122,6 @@ class ApproversController < ApplicationController
 
   def set_approver_done(is_done)
     approver = Approver.find(params[:id])
-    @approved = approver.approvable
     unless @approved.is_approver_active?
       flash[:error] = l(:error_approver_is_not_active)
       redirect_to @approved
@@ -139,7 +140,7 @@ class ApproversController < ApplicationController
 
     # JOURNALING
     notes=""
-    notes << "Done by admin for user #{approver.user}\n" if User.current.admin?
+    notes << "Done by admin for user #{approver.user}\n" if User.current.admin? and User.current != approver.user
     notes=params[:issue_notes]+"\n" unless params[:issue_notes].blank?
     journal=Journal.new(notes: notes, user: User.current)
     journal.details << JournalDetail.new(property: "attr", prop_key: "approver", old_value: (not is_done).to_s, value: is_done.to_s)
