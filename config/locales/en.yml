@@ -23,6 +23,6 @@ en:
   error_approver_is_not_active: Can't be approved on this issue status
   need_approval: Need approval
   text_need_approval: Issue %{id} waits for your approval
-  filter_approver_in_list: В списке согласования
-  filter_need_approval_by: Требует согласования
-  filter_approved_by: Согласовано
+  filter_approver_in_list: In approver list
+  filter_need_approval_by: Need approval
+  filter_approved_by: Approved

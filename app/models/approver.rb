@@ -11,7 +11,7 @@ class Approver < ActiveRecord::Base
 
   before_save :force_update_at_change
 
-  default_scope { order(:index) }
+  default_scope { order(:order_index) }
   scope :is_done, -> { where(is_done: true) }
 
   # Returns true if at least one object among objects is approved by user
@@ -41,16 +41,16 @@ class Approver < ActiveRecord::Base
   end
 
   def is_first?
-    self.index == 0
+    order_index == 0
   end
   def is_last?
-    self.index == Approver.where(approvable: self.approvable).maximum(:index)
+    order_index == Approver.where(approvable: self.approvable).maximum(:order_index)
   end
   def prev_approver
-    find_approver(self.index-1)
+    find_approver(order_index - 1)
   end
   def next_approver
-    find_approver(self.index+1)
+    find_approver(order_index + 1)
   end
 
   def can_done_by?(user)
@@ -69,8 +69,8 @@ class Approver < ActiveRecord::Base
 
   private
 
-  def find_approver(index)
-    Approver.find_by(approvable: self.approvable, index: index ) ||
+  def find_approver(order_index)
+    Approver.find_by(approvable: self.approvable, order_index: order_index ) ||
       Approver.new(approvable: self.approvable)
   end
 

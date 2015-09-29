@@ -21,7 +21,7 @@ module RedmineApproveList
               joins(:approvers)
               .where("")
               .where(approvers: {
-                id: Approver.where("#{Approver.table_name}.'index' = (SELECT MIN(a2.'index') from #{Approver.table_name} as a2 where a2.is_done=? and a2.approvable_type=approvers.approvable_type AND a2.approvable_id=approvers.approvable_id)",false),
+                id: Approver.where("#{Approver.table_name}.order_index = (SELECT MIN(a2.order_index) from #{Approver.table_name} as a2 where a2.is_done=? and a2.approvable_type=approvers.approvable_type AND a2.approvable_id=approvers.approvable_id)",false),
                 user_id: user_id
               })
             }
@@ -68,9 +68,9 @@ module RedmineApproveList
             reject { |id| id.blank? }.
             reject { |id| not Array(@all_user_ids ||= User.select(:id).map(&:id)).include?(id) }
           is_found = {}
-          approvers = self.approvers.select { |a| a.user_id == user_ids[a.index] && is_found[a.index] = true }
+          approvers = self.approvers.select { |a| a.user_id == user_ids[a.order_index] && is_found[a.order_index] = true }
           approvers += user_ids.each_with_index.map { |x, i|
-            Approver.new(user_id: x, index: i) unless is_found[i]
+            Approver.new(user_id: x, order_index: i) unless is_found[i]
           }.compact
           send :approvers=, approvers
         end
