@@ -10,8 +10,12 @@
                method: :post,
                id: 'do-approver-form') do %>
 
-    <p class="do-approver-comment">
+    <p class="do-approver-comment" style="display: none;">
     <%= text_area_tag("issue_notes", "", { rows: 5, style: "width:90%;" } ) %>
+    </p>
+
+    <p class="show-approver-comment">
+    <a href="#" class="icon icon-comment" onClick="$('p.show-approver-comment, p.do-approver-comment').toggle(); return false;"><%= l(:write_approver_comment) -%></a>
     </p>
 
     <p class="buttons">

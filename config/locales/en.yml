@@ -26,3 +26,4 @@ en:
   filter_approver_in_list: In approver list
   filter_need_approval_by: Need approval
   filter_approved_by: Approved
+  write_approver_comment: Write a comment
