@@ -122,7 +122,7 @@ class ApproversController < ApplicationController
 
   def set_approver_done(is_done)
     approver = Approver.find(params[:id])
-    unless @approved.is_approver_active?
+    unless @approved.status_approver_active?
       flash[:error] = l(:error_approver_is_not_active)
       redirect_to @approved
       return

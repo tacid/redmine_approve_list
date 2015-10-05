@@ -13,6 +13,11 @@ module RedmineApproveList
           safe_attributes 'approver_user_ids',
             :if => lambda {|issue, user| issue.new_record? && user.allowed_to?(:add_issue_approvers, issue.project)}
 
+          before_save { |issue| @issue_description_changed = issue.description_changed? or true  }
+          after_save { |issue|
+            issue.send :approver_reject! if @issue_description_changed and ( issue.status_approver_done? or issue.status_approver_active? )
+          }
+
           def self.on_active_approval
             @query_params = []
             @active_query = Setting[:plugin_redmine_approve_list]["tracker_ids"].map { |tid|
@@ -42,13 +47,7 @@ module RedmineApproveList
         end
 
         def is_approver_on?
-          Setting[:plugin_redmine_approve_list][:tracker_ids].include?(self.tracker_id.to_s)
-        end
-
-        def is_approver_active?
-          return false unless is_approver_on?
-          return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
-          return statuses[:active].to_i == self.status_id
+          @is_approver_on ||= Setting[:plugin_redmine_approve_list][:tracker_ids].include?(self.tracker_id.to_s)
         end
 
         %w(active reject done).each do |method|
@@ -57,12 +56,16 @@ module RedmineApproveList
             return false if (statuses = Setting[:plugin_redmine_approve_list]["tracker_#{self.tracker_id}"] ).nil?
             return statuses[method].blank? ? false : statuses[method].to_i
           end
+
+          define_method "status_approver_#{method}?" do
+            send("status_approver_#{method}") == status_id
+          end
         end
 
         def approver_reject!
           self.approvers.update_all(is_done: false)
           self.update_attributes(status_id: status_approver_reject) if status_approver_reject
-          self.approvers.first.send_notification unless status_approver_reject
+          self.approvers.first.send_notification if status_approver_active?
         end
 
         def approver_done!

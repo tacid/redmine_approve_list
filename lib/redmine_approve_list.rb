@@ -47,7 +47,7 @@ module RedmineApproveList
         return if @status_id_was == context[:issue].status_id
 
         # Send notification to first approver if new status is approver active status
-        context[:issue].approvers.find_by(is_done: false).send_notification if context[:issue].is_approver_active?
+        context[:issue].approvers.find_by(is_done: false).send_notification if context[:issue].status_approver_active?
       end
 
     end
