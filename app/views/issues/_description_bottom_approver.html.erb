@@ -1,6 +1,5 @@
 <% if @issue and @issue.is_approver_on? and @issue.status_approver_active? and
      @issue.can_be_approved_by? -%>
-  <hr/>
   <h3 class="title"><%= l(:field_approver) %></h3>
   <%= form_tag({controller: 'approvers',
                 action: "do_approve",
