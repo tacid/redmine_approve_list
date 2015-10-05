@@ -4,7 +4,7 @@ Redmine::Plugin.register :redmine_approve_list do
   name 'Redmine approve list'
   author 'Tacid'
   description 'This is a plugin that adds approve list to issues'
-  version '0.8.0'
+  version '0.8.1'
   url 'https://github.com/tacid/redmine_approve_list'
   author_url 'https://github.com/tacid'
 
