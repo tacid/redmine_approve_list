@@ -19,7 +19,6 @@ module RedmineApproveList
             }
             scope :need_approval_by, lambda { |user_id|
               joins(:approvers)
-              .where("")
               .where(approvers: {
                 id: Approver.where("#{Approver.table_name}.order_index = (SELECT MIN(a2.order_index) from #{Approver.table_name} as a2 where a2.is_done=? and a2.approvable_type=approvers.approvable_type AND a2.approvable_id=approvers.approvable_id)",false),
                 user_id: user_id
